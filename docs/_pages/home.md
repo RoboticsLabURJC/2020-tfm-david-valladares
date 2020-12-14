@@ -38,7 +38,7 @@ youTube_id: ID7qaEcIu4k
 
 {% include feature_row %}
 
-Welcome to my TFG's blog! 
+Welcome to my TFM's blog! 
 
 Here, I will explain my progress during the completion of my end-of-degree work. 
 
