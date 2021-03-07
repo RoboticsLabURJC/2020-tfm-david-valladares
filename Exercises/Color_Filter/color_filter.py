@@ -1,0 +1,32 @@
+from GUI import GUI
+import cv2
+import numpy as np
+# Enter sequential code!
+    
+while True:
+frame = WebrtcFrame.getImage()
+      image_blur = cv2.GaussianBlur(frame, (21, 21), sigmaX=0)
+      image_hsv = cv2.cvtColor(image_blur, cv2.COLOR_BGR2HSV)
+      lower_color = np.array([29,43,126], dtype='uint8')
+      upper_color = np.array([88, 255, 255], dtype='uint8')
+      mask = cv2.inRange(image_hsv, lower_color, upper_color)
+        
+      kernel = np.ones((3, 3), np.uint8)
+      erosion = cv2.erode(mask, kernel, iterations=2)
+      dilation = cv2.dilate(erosion, kernel, iterations=2)
+    
+      contours, hierarchy = cv2.findContours(dilation, cv2.RETR_LIST , cv2.CHAIN_APPROX_SIMPLE)
+    
+    
+      areas = [cv2.contourArea(c) for c in contours]
+        
+      if len(areas) > 0:
+          ind_area_max = np.argmax(areas)  # indice del contorno con mayor area
+        
+          # Coordenadas del circulo que engloba a el objetivo
+          (x, y), radius = cv2.minEnclosingCircle(contours[ind_area_max])
+          radius = int(radius)
+          center = (int(x), int(y))
+          cv2.circle(frame, center, radius, (0, 0, 255), 2)
+    
+      GUI.showImage(frame)
